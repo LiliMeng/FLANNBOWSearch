@@ -223,3 +223,47 @@ void Vocabulary::search_image(const cv::Mat & queryDescriptors, cv::Mat & indice
         }
 }
 
+void Vocabulary::computeLikelihood(int imgNum, vector<RankedScore> rankedScore, vector<double> likelihood)
+{
+    int imageCount=0;  //count the images which has the non-zero likelihood
+    for(int i=0; i<rankedScore.size(); i++)
+    {
+        if(rankedScore[i].imageScore!=0)
+        {
+            imageCount++;
+        }
+    }
+    cout<<"The number of images which have non-zero likelihood is "<<imageCount<<endl;
+    double mean=1/(double)imageCount;
+    cout<<"mean "<<mean<<endl;
+    double standardDeviation;
+    double variance = 0;
+    for(int i = 0; i < rankedScore.size(); i++)
+    {
+        if(rankedScore[i].imageScore!=0)
+        {
+            variance += (rankedScore[i].imageScore - mean) * (rankedScore[i].imageScore - mean) ;
+        }
+    }
+
+    standardDeviation=sqrt(variance / rankedScore.size());
+
+    cout.precision(5);
+
+    cout<<"standardDeviation "<<standardDeviation<<endl;
+
+    likelihood.resize(rankedScore.size());
+    for(int i=0; i<rankedScore.size(); i++)
+    {
+        if(rankedScore[i].imageScore!=0)
+        {
+            likelihood[i]=(rankedScore[i].imageScore-standardDeviation)/mean;
+        }
+        else
+        {
+            likelihood[i]=0;
+        }
+        cout<<"image "<<rankedScore[i].imageIndex<<" imageLikelihood "<<likelihood[i]<<endl;
+    }
+
+}
