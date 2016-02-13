@@ -48,8 +48,7 @@ class Vocabulary
 	void search_descriptors(const cv::Mat & descriptors, cv::Mat & results, cv::Mat & dists, int k);
 	void search_image(const cv::Mat & descriptors, cv::Mat & results, cv::Mat & dists, int k, int imgNum, vector<unsigned int> labels, vector<int> images, multimap<int, int> &imageScore, vector<RankedScore> &rankedScore);
 
-    void queryDistribution(const cv::Mat & features, vector<float> & distribution) const;
-    void computeLikelihood(const cv::Mat & features, vector<float> &likelihood) const;
+    void computeLikelihood(int imgNum, vector<RankedScore> rankedScore, vector<double> likelihood);
 
     cv::flann::SearchParams getFlannSearchParams();
     cvflann::flann_distance_t getFlannDistanceType();
